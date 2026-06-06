@@ -1,0 +1,25 @@
+{
+  "tasks": [
+    {
+      "name": "Format code",
+      "command": "dotnet",
+      "args": [
+        "format",
+        "prismodSale.csproj",
+        "--verify-no-changes"
+      ],
+      "group": "pre-commit"
+    },
+    {
+      "name": "Build with analyzers",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "prismodSale.csproj",
+        "-c",
+        "Release"
+      ],
+      "group": "pre-push"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+commit_message_file="$1"
+commit_message="$(head -n 1 "$commit_message_file")"
+
+if ! printf '%s\n' "$commit_message" | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore)(\([a-z0-9._-]+\))?(!)?: .+'; then
+    echo "Invalid commit message. Use Conventional Commits, for example: feat(api): add health endpoint"
+    exit 1
+fi
