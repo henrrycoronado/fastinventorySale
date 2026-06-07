@@ -1,8 +1,8 @@
-using prismodSale.Src.Application.DTOs.Sales;
-using prismodSale.Src.Application.Interfaces;
-using prismodSale.Src.Infraestructure.Persistence.Interfaces;
+using fastinventorySale.Src.Application.DTOs.Sales;
+using fastinventorySale.Src.Application.Interfaces;
+using fastinventorySale.Src.Infraestructure.Persistence.Interfaces;
 
-namespace prismodSale.Src.Application.Services;
+namespace fastinventorySale.Src.Application.Services;
 
 public class DashboardService : IDashboardService
 {

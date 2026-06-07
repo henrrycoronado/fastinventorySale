@@ -1,4 +1,4 @@
-namespace prismodSale.Src.Domain.Entities;
+namespace fastinventorySale.Src.Domain.Entities;
 
 public class TaxConfiguration
 {

@@ -1,7 +1,7 @@
-using prismodSale.Src.Application.DTOs.Common;
-using prismodSale.Src.Application.DTOs.Sales;
+using fastinventorySale.Src.Application.DTOs.Common;
+using fastinventorySale.Src.Application.DTOs.Sales;
 
-namespace prismodSale.Src.Application.Interfaces;
+namespace fastinventorySale.Src.Application.Interfaces;
 
 public interface ICatalogService
 {

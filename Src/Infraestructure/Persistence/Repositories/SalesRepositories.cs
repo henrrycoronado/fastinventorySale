@@ -1,9 +1,10 @@
-using Microsoft.EntityFrameworkCore;
-using prismodSale.Src.Domain.Entities;
-using prismodSale.Src.Infraestructure.Persistence.Interfaces;
-using prismodSale.Src.Infraestructure.Persistence.Models;
+using fastinventorySale.Src.Domain.Entities;
+using fastinventorySale.Src.Infraestructure.Persistence.Interfaces;
+using fastinventorySale.Src.Infraestructure.Persistence.Models;
 
-namespace prismodSale.Src.Infraestructure.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
+
+namespace fastinventorySale.Src.Infraestructure.Persistence.Repositories;
 
 public class TaxConfigurationRepository : ITaxConfigurationRepository
 {
@@ -121,8 +122,13 @@ public class TicketRepository : ITicketRepository
     {
         await _dbContext.TicketItems.AddAsync(new TicketItemModel
         {
-            TicketItemCen = item.TicketItemCen, TicketCen = ticketCen, ProductCen = item.ProductCen,
-            Quantity = item.Quantity, UnitPrice = item.UnitPrice, Note = item.Note, KdsStatus = item.KdsStatus
+            TicketItemCen = item.TicketItemCen,
+            TicketCen = ticketCen,
+            ProductCen = item.ProductCen,
+            Quantity = item.Quantity,
+            UnitPrice = item.UnitPrice,
+            Note = item.Note,
+            KdsStatus = item.KdsStatus
         });
     }
     public async Task UpdateItemAsync(TicketItem item)

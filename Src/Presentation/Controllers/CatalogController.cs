@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using prismodSale.Src.Application.DTOs.Common;
-using prismodSale.Src.Application.DTOs.Sales;
-using prismodSale.Src.Application.Interfaces;
+using fastinventorySale.Src.Application.DTOs.Common;
+using fastinventorySale.Src.Application.DTOs.Sales;
+using fastinventorySale.Src.Application.Interfaces;
 
-namespace prismodSale.Src.Presentation.Controllers;
+using Microsoft.AspNetCore.Mvc;
+
+namespace fastinventorySale.Src.Presentation.Controllers;
 
 [ApiController]
 [Route("api/sales/companies/{companyCen}/catalog")]

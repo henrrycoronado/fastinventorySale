@@ -1,4 +1,4 @@
-## Prismod Sale
+## Fastinventory Sale
 
 Base structure for the Sale API.
 
@@ -18,7 +18,7 @@ Base structure for the Sale API.
 
 ### Manual setup
 
-From the `prismodSale` folder, run these steps once:
+From the `fastinventorySale` folder, run these steps once:
 
 ```bash
 dotnet tool restore
@@ -28,8 +28,8 @@ dotnet husky install
 Useful checks:
 
 ```bash
-dotnet format prismodSale.csproj --verify-no-changes
-dotnet build prismodSale.csproj
+dotnet format fastinventorySale.csproj --verify-no-changes
+dotnet build fastinventorySale.csproj
 ```
 
 The hooks live in `.husky/`:

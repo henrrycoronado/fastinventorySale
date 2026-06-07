@@ -1,10 +1,10 @@
-using prismodSale.Src.Application.DTOs.Sales;
-using prismodSale.Src.Application.Interfaces;
-using prismodSale.Src.Domain.Entities;
-using prismodSale.Src.Infraestructure.Persistence.Interfaces;
-using prismodSale.Src.Infraestructure.ExternalServices;
+using fastinventorySale.Src.Application.DTOs.Sales;
+using fastinventorySale.Src.Application.Interfaces;
+using fastinventorySale.Src.Domain.Entities;
+using fastinventorySale.Src.Infraestructure.ExternalServices;
+using fastinventorySale.Src.Infraestructure.Persistence.Interfaces;
 
-namespace prismodSale.Src.Application.Services;
+namespace fastinventorySale.Src.Application.Services;
 
 public class SaleService : ISaleService
 {
@@ -37,7 +37,7 @@ public class SaleService : ISaleService
         };
 
         var inventoryDocCen = await _inventoryClient.ConsumeStockAsync(companyCen, stockRequest);
-        
+
         // 2. Create Sale record
         var sale = new Sale(ticketCen, ticket.Total, request.PaymentMethodCode, inventoryDocCen);
         await _saleRepo.AddAsync(sale);

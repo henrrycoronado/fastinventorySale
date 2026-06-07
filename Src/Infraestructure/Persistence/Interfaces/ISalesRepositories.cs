@@ -1,6 +1,6 @@
-using prismodSale.Src.Domain.Entities;
+using fastinventorySale.Src.Domain.Entities;
 
-namespace prismodSale.Src.Infraestructure.Persistence.Interfaces;
+namespace fastinventorySale.Src.Infraestructure.Persistence.Interfaces;
 
 public interface ITaxConfigurationRepository
 {

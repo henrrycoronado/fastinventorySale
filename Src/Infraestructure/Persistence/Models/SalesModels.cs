@@ -1,4 +1,4 @@
-namespace prismodSale.Src.Infraestructure.Persistence.Models;
+namespace fastinventorySale.Src.Infraestructure.Persistence.Models;
 
 public class TaxConfigurationModel
 {

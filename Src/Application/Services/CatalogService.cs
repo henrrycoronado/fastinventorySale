@@ -1,9 +1,9 @@
-using prismodSale.Src.Application.DTOs.Common;
-using prismodSale.Src.Application.DTOs.Sales;
-using prismodSale.Src.Application.Interfaces;
-using prismodSale.Src.Infraestructure.ExternalServices;
+using fastinventorySale.Src.Application.DTOs.Common;
+using fastinventorySale.Src.Application.DTOs.Sales;
+using fastinventorySale.Src.Application.Interfaces;
+using fastinventorySale.Src.Infraestructure.ExternalServices;
 
-namespace prismodSale.Src.Application.Services;
+namespace fastinventorySale.Src.Application.Services;
 
 public class CatalogService : ICatalogService
 {

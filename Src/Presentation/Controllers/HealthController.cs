@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace PrismodSale.Src.Presentation.Controllers;
+namespace FastinventorySale.Src.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -11,7 +11,7 @@ public sealed class HealthController : ControllerBase
     {
         return Ok(new
         {
-            service = "prismodSale",
+            service = "fastinventorySale",
             status = "ok",
             timestampUtc = DateTime.UtcNow
         });

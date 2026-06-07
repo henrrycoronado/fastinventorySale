@@ -1,4 +1,4 @@
-namespace prismodSale.Src.Application.DTOs.Sales;
+namespace fastinventorySale.Src.Application.DTOs.Sales;
 
 public class SellableProductContractDto
 {

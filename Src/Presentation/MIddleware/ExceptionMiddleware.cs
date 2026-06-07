@@ -1,7 +1,8 @@
 using System.Net;
+
 using Microsoft.AspNetCore.Mvc;
 
-namespace prismodSale.Src.Presentation.MIddleware;
+namespace fastinventorySale.Src.Presentation.MIddleware;
 
 public class ExceptionMiddleware
 {

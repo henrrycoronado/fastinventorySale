@@ -1,8 +1,9 @@
 using System.Text.Json;
-using prismodSale.Src.Application.DTOs.Common;
-using prismodSale.Src.Application.DTOs.Sales;
 
-namespace prismodSale.Src.Infraestructure.ExternalServices;
+using fastinventorySale.Src.Application.DTOs.Common;
+using fastinventorySale.Src.Application.DTOs.Sales;
+
+namespace fastinventorySale.Src.Infraestructure.ExternalServices;
 
 public class StockValidationItemDto
 {
@@ -39,9 +40,9 @@ public class InventoryClient : IInventoryClient
     {
         var query = $"?search={filters.Search}&categoryCen={filters.CategoryCen}&warehouseCen={filters.WarehouseCen}&onlyAvailable={filters.OnlyAvailable}&page={filters.Page}&pageSize={filters.PageSize}";
         var response = await _httpClient.GetAsync($"/api/inventory/companies/{companyCen}/sellable-products{query}");
-        
+
         if (!response.IsSuccessStatusCode) return Enumerable.Empty<SellableProductContractDto>();
-        
+
         return await response.Content.ReadFromJsonAsync<IEnumerable<SellableProductContractDto>>() ?? Enumerable.Empty<SellableProductContractDto>();
     }
 
@@ -54,7 +55,7 @@ public class InventoryClient : IInventoryClient
             _logger.LogError("Failed to consume stock in Inventory API: {Error}", error);
             return null;
         }
-        
+
         var result = await response.Content.ReadFromJsonAsync<JsonElement>();
         return result.GetProperty("documentCen").GetString();
     }

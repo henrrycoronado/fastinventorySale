@@ -1,4 +1,4 @@
-namespace prismodSale.Src.Application.DTOs.Common;
+namespace fastinventorySale.Src.Application.DTOs.Common;
 
 public class PagedResultDto<T>
 {

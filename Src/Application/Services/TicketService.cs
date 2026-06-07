@@ -1,9 +1,9 @@
-using prismodSale.Src.Application.DTOs.Sales;
-using prismodSale.Src.Application.Interfaces;
-using prismodSale.Src.Domain.Entities;
-using prismodSale.Src.Infraestructure.Persistence.Interfaces;
+using fastinventorySale.Src.Application.DTOs.Sales;
+using fastinventorySale.Src.Application.Interfaces;
+using fastinventorySale.Src.Domain.Entities;
+using fastinventorySale.Src.Infraestructure.Persistence.Interfaces;
 
-namespace prismodSale.Src.Application.Services;
+namespace fastinventorySale.Src.Application.Services;
 
 public class TicketService : ITicketService
 {
@@ -49,8 +49,8 @@ public class TicketService : ITicketService
         if (ticket.Status != "OPEN") throw new InvalidOperationException("Ticket is not open");
 
         var item = new TicketItem(request.ProductCen, request.Quantity, 0, request.Note); // Price should come from Catalog/Inventory
-        // For now, setting price to 0, needs integration lookup
-        
+                                                                                          // For now, setting price to 0, needs integration lookup
+
         await _ticketRepo.AddItemAsync(ticketCen, item);
         await UpdateTotals(ticket, companyCen);
         return MapToItemDto(item);
@@ -60,15 +60,15 @@ public class TicketService : ITicketService
     {
         var item = await _ticketRepo.GetItemByCenAsync(ticketItemCen);
         if (item == null) throw new KeyNotFoundException("Item not found");
-        
+
         item.UpdateQuantity(request.Quantity);
         item.UpdateNote(request.Note);
-        
+
         await _ticketRepo.UpdateItemAsync(item);
-        
+
         var ticket = await _ticketRepo.GetByCenAsync(ticketCen);
         if (ticket != null) await UpdateTotals(ticket, companyCen);
-        
+
         return MapToItemDto(item);
     }
 
@@ -97,7 +97,7 @@ public class TicketService : ITicketService
     {
         var ticket = await _ticketRepo.GetByCenAsync(ticketCen);
         if (ticket == null) throw new KeyNotFoundException("Ticket not found");
-        
+
         var waiter = await _waiterRepo.GetByCenAsync(request.WaiterCen);
         if (waiter == null) throw new KeyNotFoundException("Waiter not found");
 
@@ -112,11 +112,11 @@ public class TicketService : ITicketService
     {
         var ticket = await _ticketRepo.GetByCenAsync(ticketCen);
         if (ticket == null) throw new KeyNotFoundException("Ticket not found");
-        
+
         ticket.Cancel();
         await _ticketRepo.UpdateAsync(ticket);
         await _uow.SaveChangesAsync();
-        
+
         return new CancelTicketContractResponse { TicketCen = ticketCen, Status = ticket.Status };
     }
 
