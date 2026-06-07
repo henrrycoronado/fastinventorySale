@@ -1,5 +1,6 @@
 using prismodSale.Src.Application.DTOs.Sales;
 using prismodSale.Src.Application.Interfaces;
+using prismodSale.Src.Domain.Entities;
 using prismodSale.Src.Infraestructure.Persistence.Interfaces;
 
 namespace prismodSale.Src.Application.Services;
@@ -23,6 +24,15 @@ public class KdsService : IKdsService
         return teams.Select(t => new KdsTeamContractResponse { TeamCen = t.TeamCen, Name = t.Name, CategoryCens = t.CategoryCens.ToList() });
     }
 
+    public async Task<KdsTeamContractResponse> CreateTeamAsync(CreateKdsTeamDto dto)
+    {
+        var team = new KdsTeam(dto.CompanyCen, dto.Name);
+        foreach (var cat in dto.CategoryCens) team.AddCategory(cat);
+        await _teamRepo.AddAsync(team);
+        await _uow.SaveChangesAsync();
+        return new KdsTeamContractResponse { TeamCen = team.TeamCen, Name = team.Name, CategoryCens = team.CategoryCens.ToList() };
+    }
+
     public async Task<IEnumerable<KdsItemContractResponse>> GetItemsByTeamAsync(string companyCen, string teamCen)
     {
         var team = await _teamRepo.GetByCenAsync(teamCen);
@@ -31,12 +41,11 @@ public class KdsService : IKdsService
         var tickets = await _ticketRepo.GetActiveByCompanyCenAsync(companyCen);
         var items = tickets.SelectMany(t => t.Items.Select(i => new { Ticket = t, Item = i }))
             .Where(x => x.Item.KdsStatus != "DELIVERED" && x.Item.KdsStatus != "CANCELED")
-            // Filter by team categories would go here
             .Select(x => new KdsItemContractResponse
             {
                 TicketItemCen = x.Item.TicketItemCen,
                 TicketCen = x.Ticket.TicketCen,
-                ProductName = "Unknown", // Needs enrichment
+                ProductName = "Unknown",
                 Quantity = x.Item.Quantity,
                 Status = x.Item.KdsStatus,
                 OrderedAt = x.Ticket.CreatedAt,

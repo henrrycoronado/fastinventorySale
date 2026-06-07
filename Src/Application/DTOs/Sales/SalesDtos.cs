@@ -163,3 +163,16 @@ public class WaiterContractResponse
     public string WaiterCen { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
 }
+
+public class CreateWaiterDto
+{
+    public string CompanyCen { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+}
+
+public class CreateKdsTeamDto
+{
+    public string CompanyCen { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public List<string> CategoryCens { get; set; } = new();
+}

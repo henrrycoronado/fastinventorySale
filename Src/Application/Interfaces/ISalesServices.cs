@@ -18,6 +18,7 @@ public interface IDashboardService
 public interface IKdsService
 {
     Task<IEnumerable<KdsTeamContractResponse>> GetTeamsAsync(string companyCen);
+    Task<KdsTeamContractResponse> CreateTeamAsync(CreateKdsTeamDto dto);
     Task<IEnumerable<KdsItemContractResponse>> GetItemsByTeamAsync(string companyCen, string teamCen);
     Task UpdateItemStatusAsync(string companyCen, string ticketItemCen, string status);
 }
@@ -47,4 +48,5 @@ public interface IConfigService
     Task<TaxConfigurationContractResponse> UpdateTaxConfigurationAsync(string companyCen, UpdateTaxConfigurationContractRequest request);
     Task<IEnumerable<PaymentMethodContractResponse>> GetPaymentMethodsAsync();
     Task<IEnumerable<WaiterContractResponse>> GetWaitersAsync(string companyCen);
+    Task<WaiterContractResponse> CreateWaiterAsync(CreateWaiterDto dto);
 }

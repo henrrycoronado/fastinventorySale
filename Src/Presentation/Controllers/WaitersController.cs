@@ -13,4 +13,12 @@ public class WaitersController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<WaiterContractResponse>>> GetAll(string companyCen) => Ok(await _configService.GetWaitersAsync(companyCen));
+
+    [HttpPost]
+    public async Task<ActionResult<WaiterContractResponse>> Create(string companyCen, [FromBody] CreateWaiterDto dto)
+    {
+        dto.CompanyCen = companyCen;
+        var waiter = await _configService.CreateWaiterAsync(dto);
+        return CreatedAtAction(nameof(GetAll), new { companyCen }, waiter);
+    }
 }

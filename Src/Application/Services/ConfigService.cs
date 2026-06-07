@@ -1,5 +1,6 @@
 using prismodSale.Src.Application.DTOs.Sales;
 using prismodSale.Src.Application.Interfaces;
+using prismodSale.Src.Domain.Entities;
 using prismodSale.Src.Infraestructure.Persistence.Interfaces;
 
 namespace prismodSale.Src.Application.Services;
@@ -52,5 +53,13 @@ public class ConfigService : IConfigService
     {
         var waiters = await _waiterRepo.GetByCompanyCenAsync(companyCen);
         return waiters.Select(w => new WaiterContractResponse { WaiterCen = w.WaiterCen, Name = w.Name });
+    }
+
+    public async Task<WaiterContractResponse> CreateWaiterAsync(CreateWaiterDto dto)
+    {
+        var waiter = new Waiter(dto.CompanyCen, dto.Name);
+        await _waiterRepo.AddAsync(waiter);
+        await _uow.SaveChangesAsync();
+        return new WaiterContractResponse { WaiterCen = waiter.WaiterCen, Name = waiter.Name };
     }
 }

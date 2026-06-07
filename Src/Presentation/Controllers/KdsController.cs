@@ -14,6 +14,14 @@ public class KdsController : ControllerBase
     [HttpGet("teams")]
     public async Task<ActionResult<IEnumerable<KdsTeamContractResponse>>> GetTeams(string companyCen) => Ok(await _kdsService.GetTeamsAsync(companyCen));
 
+    [HttpPost("teams")]
+    public async Task<ActionResult<KdsTeamContractResponse>> CreateTeam(string companyCen, [FromBody] CreateKdsTeamDto dto)
+    {
+        dto.CompanyCen = companyCen;
+        var team = await _kdsService.CreateTeamAsync(dto);
+        return CreatedAtAction(nameof(GetTeams), new { companyCen }, team);
+    }
+
     [HttpGet("teams/{teamCen}/items")]
     public async Task<ActionResult<IEnumerable<KdsItemContractResponse>>> GetItemsByTeam(string companyCen, string teamCen) => Ok(await _kdsService.GetItemsByTeamAsync(companyCen, teamCen));
 
