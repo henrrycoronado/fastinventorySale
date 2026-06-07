@@ -1,0 +1,59 @@
+using prismodSale.Src.Application.DTOs.Sales;
+using prismodSale.Src.Application.Interfaces;
+using prismodSale.Src.Infraestructure.Persistence.Interfaces;
+
+namespace prismodSale.Src.Application.Services;
+
+public class KdsService : IKdsService
+{
+    private readonly IKdsTeamRepository _teamRepo;
+    private readonly ITicketRepository _ticketRepo;
+    private readonly IUnitOfWork _uow;
+
+    public KdsService(IKdsTeamRepository teamRepo, ITicketRepository ticketRepo, IUnitOfWork uow)
+    {
+        _teamRepo = teamRepo;
+        _ticketRepo = ticketRepo;
+        _uow = uow;
+    }
+
+    public async Task<IEnumerable<KdsTeamContractResponse>> GetTeamsAsync(string companyCen)
+    {
+        var teams = await _teamRepo.GetByCompanyCenAsync(companyCen);
+        return teams.Select(t => new KdsTeamContractResponse { TeamCen = t.TeamCen, Name = t.Name, CategoryCens = t.CategoryCens.ToList() });
+    }
+
+    public async Task<IEnumerable<KdsItemContractResponse>> GetItemsByTeamAsync(string companyCen, string teamCen)
+    {
+        var team = await _teamRepo.GetByCenAsync(teamCen);
+        if (team == null) return Enumerable.Empty<KdsItemContractResponse>();
+
+        var tickets = await _ticketRepo.GetActiveByCompanyCenAsync(companyCen);
+        var items = tickets.SelectMany(t => t.Items.Select(i => new { Ticket = t, Item = i }))
+            .Where(x => x.Item.KdsStatus != "DELIVERED" && x.Item.KdsStatus != "CANCELED")
+            // Filter by team categories would go here
+            .Select(x => new KdsItemContractResponse
+            {
+                TicketItemCen = x.Item.TicketItemCen,
+                TicketCen = x.Ticket.TicketCen,
+                ProductName = "Unknown", // Needs enrichment
+                Quantity = x.Item.Quantity,
+                Status = x.Item.KdsStatus,
+                OrderedAt = x.Ticket.CreatedAt,
+                Note = x.Item.Note
+            });
+
+        return items;
+    }
+
+    public async Task UpdateItemStatusAsync(string companyCen, string ticketItemCen, string status)
+    {
+        var item = await _ticketRepo.GetItemByCenAsync(ticketItemCen);
+        if (item != null)
+        {
+            item.SetKdsStatus(status);
+            await _ticketRepo.UpdateItemAsync(item);
+            await _uow.SaveChangesAsync();
+        }
+    }
+}

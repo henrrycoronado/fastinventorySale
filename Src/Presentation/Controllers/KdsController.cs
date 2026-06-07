@@ -1,0 +1,26 @@
+using Microsoft.AspNetCore.Mvc;
+using prismodSale.Src.Application.DTOs.Sales;
+using prismodSale.Src.Application.Interfaces;
+
+namespace prismodSale.Src.Presentation.Controllers;
+
+[ApiController]
+[Route("api/sales/companies/{companyCen}/kds")]
+public class KdsController : ControllerBase
+{
+    private readonly IKdsService _kdsService;
+    public KdsController(IKdsService kdsService) => _kdsService = kdsService;
+
+    [HttpGet("teams")]
+    public async Task<ActionResult<IEnumerable<KdsTeamContractResponse>>> GetTeams(string companyCen) => Ok(await _kdsService.GetTeamsAsync(companyCen));
+
+    [HttpGet("teams/{teamCen}/items")]
+    public async Task<ActionResult<IEnumerable<KdsItemContractResponse>>> GetItemsByTeam(string companyCen, string teamCen) => Ok(await _kdsService.GetItemsByTeamAsync(companyCen, teamCen));
+
+    [HttpPatch("items/{ticketItemCen}/status")]
+    public async Task<IActionResult> UpdateItemStatus(string companyCen, string ticketItemCen, [FromBody] UpdateKdsItemStatusContractRequest request)
+    {
+        await _kdsService.UpdateItemStatusAsync(companyCen, ticketItemCen, request.Status);
+        return Ok();
+    }
+}
