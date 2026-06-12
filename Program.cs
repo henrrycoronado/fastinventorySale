@@ -32,7 +32,7 @@ if (string.IsNullOrEmpty(inventoryApiUrl))
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-// Repositories
+
 builder.Services.AddScoped<ITaxConfigurationRepository, TaxConfigurationRepository>();
 builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 builder.Services.AddScoped<IWaiterRepository, WaiterRepository>();
@@ -41,7 +41,7 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// External Clients
+
 var retryPolicy = HttpPolicyExtensions
     .HandleTransientHttpError()
     .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
@@ -57,7 +57,7 @@ builder.Services.AddHttpClient<IInventoryClient, InventoryClient>(client =>
 .AddPolicyHandler(retryPolicy)
 .AddPolicyHandler(circuitBreakerPolicy);
 
-// Services
+
 builder.Services.AddScoped<ICatalogService, CatalogService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IKdsService, KdsService>();

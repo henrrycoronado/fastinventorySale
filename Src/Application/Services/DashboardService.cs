@@ -51,7 +51,6 @@ public class DashboardService : IDashboardService
 
     public async Task<IEnumerable<TopProductDashboardContractResponse>> GetTopProductsAsync(string companyCen, int topN)
     {
-        // This would normally be a complex SQL query. For now, mock or simple agg.
         return new List<TopProductDashboardContractResponse>();
     }
 

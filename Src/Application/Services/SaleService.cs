@@ -27,10 +27,9 @@ public class SaleService : ISaleService
         if (ticket == null) throw new KeyNotFoundException("Ticket not found");
         if (ticket.Status != "OPEN") throw new InvalidOperationException("Ticket is already closed or canceled");
 
-        // 1. Consume stock in Inventory
         var stockRequest = new StockValidationRequestDto
         {
-            WarehouseCen = "CEN-WH-001", // Should be configured per company/station
+            WarehouseCen = "CEN-WH-001",
             Source = "SALE",
             ReferenceCen = ticket.TicketCen,
             Items = ticket.Items.Select(i => new StockValidationItemDto { ProductCen = i.ProductCen, Quantity = i.Quantity }).ToList()
@@ -38,11 +37,9 @@ public class SaleService : ISaleService
 
         var inventoryDocCen = await _inventoryClient.ConsumeStockAsync(companyCen, stockRequest);
 
-        // 2. Create Sale record
         var sale = new Sale(ticketCen, ticket.Total, request.PaymentMethodCode, inventoryDocCen);
         await _saleRepo.AddAsync(sale);
 
-        // 3. Close ticket
         ticket.Close();
         await _ticketRepo.UpdateAsync(ticket);
         await _uow.SaveChangesAsync();

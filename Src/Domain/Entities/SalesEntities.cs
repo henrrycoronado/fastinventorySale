@@ -67,7 +67,7 @@ public class Ticket
     public string CompanyCen { get; private set; }
     public string? WaiterCen { get; private set; }
     public int DailyNumber { get; private set; }
-    public string Status { get; private set; } // OPEN, CLOSED, CANCELED
+    public string Status { get; private set; }
     public decimal Subtotal { get; private set; }
     public decimal TaxAmount { get; private set; }
     public decimal Total { get; private set; }
@@ -89,7 +89,7 @@ public class Ticket
     public void AddItem(string productCen, int quantity, decimal unitPrice, string? note = null)
     {
         _items.Add(new TicketItem(productCen, quantity, unitPrice, note));
-        RecalculateTotals(0); // Needs tax percentage from service/app layer
+        RecalculateTotals(0);
     }
 
     public void RecalculateTotals(decimal taxPercentage)
@@ -111,7 +111,7 @@ public class TicketItem
     public int Quantity { get; private set; }
     public decimal UnitPrice { get; private set; }
     public string? Note { get; private set; }
-    public string KdsStatus { get; private set; } // CREATED, PREPARING, DELIVERED, CANCELED
+    public string KdsStatus { get; private set; }
     public DateTimeOffset? SentAt { get; private set; }
     public int ResendCount { get; private set; }
 

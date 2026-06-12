@@ -15,9 +15,9 @@ public class TicketService : ITicketService
     private readonly IUnitOfWork _uow;
 
     public TicketService(
-        ITicketRepository ticketRepo, 
-        ITaxConfigurationRepository taxRepo, 
-        IWaiterRepository waiterRepo, 
+        ITicketRepository ticketRepo,
+        ITaxConfigurationRepository taxRepo,
+        IWaiterRepository waiterRepo,
         ICatalogService catalogService,
         IUnitOfWork uow)
     {
@@ -56,11 +56,8 @@ public class TicketService : ITicketService
         if (ticket == null) throw new KeyNotFoundException("Ticket not found");
         if (ticket.Status != "OPEN") throw new InvalidOperationException("Ticket is not open");
 
-        // Integration Step: Fetch current price from Inventory (Sales Catalog)
-        // This ensures the price is frozen at the moment of the transaction
         var sellableProducts = await _catalogService.GetProductsAsync(companyCen, new SellableProductQueryFilters { Search = request.ProductCen });
         var product = sellableProducts.FirstOrDefault(p => p.ProductCen == request.ProductCen);
-        
         decimal unitPrice = product?.SalePrice ?? 0;
         if (unitPrice == 0) throw new InvalidOperationException("Product price not found or is zero. Transaction cannot proceed.");
 
@@ -91,7 +88,6 @@ public class TicketService : ITicketService
     {
         var ticket = await _ticketRepo.GetByCenAsync(ticketCen);
         if (ticket == null) throw new KeyNotFoundException("Ticket not found");
-        
         var sentItems = new List<TicketItemContractResponse>();
         foreach (var item in ticket.Items.Where(i => i.KdsStatus == "CREATED"))
         {
@@ -111,7 +107,6 @@ public class TicketService : ITicketService
         item.IncrementResend();
         await _ticketRepo.UpdateItemAsync(item);
         await _uow.SaveChangesAsync();
-        
         return MapToItemDto(item);
     }
 
@@ -120,7 +115,6 @@ public class TicketService : ITicketService
         var ticket = await _ticketRepo.GetByCenAsync(ticketCen);
         if (ticket == null) throw new KeyNotFoundException("Ticket not found");
 
-        // Placeholder for PDF generation
         return System.Text.Encoding.UTF8.GetBytes($"Ticket: {ticket.TicketCen}\nDaily Number: {ticket.DailyNumber}\nTotal: {ticket.Total}");
     }
 
