@@ -30,11 +30,12 @@ public interface ITicketService
     Task<IEnumerable<TicketItemContractResponse>> GetItemsAsync(string companyCen, string ticketCen);
     Task<TicketItemContractResponse> AddItemAsync(string companyCen, string ticketCen, CreateTicketItemContractRequest request);
     Task<TicketItemContractResponse> UpdateItemAsync(string companyCen, string ticketCen, string ticketItemCen, UpdateTicketItemContractRequest request);
-    Task MarkAsSentToKdsAsync(string companyCen, string ticketCen);
-    Task ResendToKdsAsync(string companyCen, string ticketCen, string ticketItemCen);
+    Task<IEnumerable<TicketItemContractResponse>> MarkAsSentToKdsAsync(string companyCen, string ticketCen);
+    Task<TicketItemContractResponse> ResendToKdsAsync(string companyCen, string ticketCen, string ticketItemCen);
     Task<AssignTicketWaiterContractResponse> AssignWaiterAsync(string companyCen, string ticketCen, AssignTicketWaiterContractRequest request);
     Task<CancelTicketContractResponse> CancelAsync(string companyCen, string ticketCen, CancelTicketContractRequest request);
     Task<TicketTotalsContractResponse> GetTotalsAsync(string companyCen, string ticketCen);
+    Task<byte[]> PrintTicketAsync(string companyCen, string ticketCen);
 }
 
 public interface ISaleService

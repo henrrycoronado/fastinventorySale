@@ -72,25 +72,41 @@ public class TicketService : ITicketService
         return MapToItemDto(item);
     }
 
-    public async Task MarkAsSentToKdsAsync(string companyCen, string ticketCen)
+    public async Task<IEnumerable<TicketItemContractResponse>> MarkAsSentToKdsAsync(string companyCen, string ticketCen)
     {
         var ticket = await _ticketRepo.GetByCenAsync(ticketCen);
-        if (ticket == null) return;
+        if (ticket == null) throw new KeyNotFoundException("Ticket not found");
+        
+        var sentItems = new List<TicketItemContractResponse>();
         foreach (var item in ticket.Items.Where(i => i.KdsStatus == "CREATED"))
         {
             item.MarkAsSent();
             await _ticketRepo.UpdateItemAsync(item);
+            sentItems.Add(MapToItemDto(item));
         }
+        await _uow.SaveChangesAsync();
+        return sentItems;
     }
 
-    public async Task ResendToKdsAsync(string companyCen, string ticketCen, string ticketItemCen)
+    public async Task<TicketItemContractResponse> ResendToKdsAsync(string companyCen, string ticketCen, string ticketItemCen)
     {
         var item = await _ticketRepo.GetItemByCenAsync(ticketItemCen);
-        if (item != null)
-        {
-            item.IncrementResend();
-            await _ticketRepo.UpdateItemAsync(item);
-        }
+        if (item == null) throw new KeyNotFoundException("Item not found");
+
+        item.IncrementResend();
+        await _ticketRepo.UpdateItemAsync(item);
+        await _uow.SaveChangesAsync();
+        
+        return MapToItemDto(item);
+    }
+
+    public async Task<byte[]> PrintTicketAsync(string companyCen, string ticketCen)
+    {
+        var ticket = await _ticketRepo.GetByCenAsync(ticketCen);
+        if (ticket == null) throw new KeyNotFoundException("Ticket not found");
+
+        // Placeholder for PDF generation
+        return System.Text.Encoding.UTF8.GetBytes($"Ticket: {ticket.TicketCen}\nDaily Number: {ticket.DailyNumber}\nTotal: {ticket.Total}");
     }
 
     public async Task<AssignTicketWaiterContractResponse> AssignWaiterAsync(string companyCen, string ticketCen, AssignTicketWaiterContractRequest request)
