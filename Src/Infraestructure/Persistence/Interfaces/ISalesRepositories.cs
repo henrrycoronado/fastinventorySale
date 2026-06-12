@@ -45,6 +45,7 @@ public interface ISaleRepository
 {
     Task<Sale?> GetByTicketCenAsync(string ticketCen);
     Task<IEnumerable<Sale>> GetDailyByCompanyCenAsync(string companyCen, DateTimeOffset date);
+    Task<IEnumerable<Sale>> GetByMonthlyRangeAsync(string companyCen, DateTimeOffset start, DateTimeOffset end);
     Task AddAsync(Sale sale);
 }
 

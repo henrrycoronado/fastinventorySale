@@ -23,6 +23,32 @@ public class DashboardService : IDashboardService
         return new DailySalesDashboardDto { TotalSales = total, TicketsCount = count, AverageTicket = count > 0 ? total / count : 0 };
     }
 
+    public async Task<MonthlySalesDashboardDto> GetMonthlySalesAsync(string companyCen)
+    {
+        var now = DateTimeOffset.UtcNow;
+        var startCurrent = new DateTimeOffset(now.Year, now.Month, 1, 0, 0, 0, TimeSpan.Zero);
+        var endCurrent = startCurrent.AddMonths(1).AddTicks(-1);
+
+        var startPrev = startCurrent.AddMonths(-1);
+        var endPrev = startCurrent.AddTicks(-1);
+
+        var currentSales = await _saleRepo.GetByMonthlyRangeAsync(companyCen, startCurrent, endCurrent);
+        var prevSales = await _saleRepo.GetByMonthlyRangeAsync(companyCen, startPrev, endPrev);
+
+        return new MonthlySalesDashboardDto
+        {
+            CurrentMonth = MapToSummary(currentSales),
+            PreviousMonth = MapToSummary(prevSales)
+        };
+    }
+
+    private static MonthlySummaryDto MapToSummary(IEnumerable<fastinventorySale.Src.Domain.Entities.Sale> sales)
+    {
+        var total = (double)sales.Sum(s => s.Total);
+        var count = sales.Count();
+        return new MonthlySummaryDto { TotalSales = total, TicketsCount = count, AverageTicket = count > 0 ? total / count : 0 };
+    }
+
     public async Task<IEnumerable<TopProductDashboardContractResponse>> GetTopProductsAsync(string companyCen, int topN)
     {
         // This would normally be a complex SQL query. For now, mock or simple agg.

@@ -1,3 +1,4 @@
+using fastinventorySale.Src.Application.DTOs.Common;
 using fastinventorySale.Src.Application.DTOs.Sales;
 using fastinventorySale.Src.Application.Interfaces;
 using fastinventorySale.Src.Domain.Entities;
@@ -10,13 +11,20 @@ public class TicketService : ITicketService
     private readonly ITicketRepository _ticketRepo;
     private readonly ITaxConfigurationRepository _taxRepo;
     private readonly IWaiterRepository _waiterRepo;
+    private readonly ICatalogService _catalogService;
     private readonly IUnitOfWork _uow;
 
-    public TicketService(ITicketRepository ticketRepo, ITaxConfigurationRepository taxRepo, IWaiterRepository waiterRepo, IUnitOfWork uow)
+    public TicketService(
+        ITicketRepository ticketRepo, 
+        ITaxConfigurationRepository taxRepo, 
+        IWaiterRepository waiterRepo, 
+        ICatalogService catalogService,
+        IUnitOfWork uow)
     {
         _ticketRepo = ticketRepo;
         _taxRepo = taxRepo;
         _waiterRepo = waiterRepo;
+        _catalogService = catalogService;
         _uow = uow;
     }
 
@@ -48,8 +56,15 @@ public class TicketService : ITicketService
         if (ticket == null) throw new KeyNotFoundException("Ticket not found");
         if (ticket.Status != "OPEN") throw new InvalidOperationException("Ticket is not open");
 
-        var item = new TicketItem(request.ProductCen, request.Quantity, 0, request.Note); // Price should come from Catalog/Inventory
-                                                                                          // For now, setting price to 0, needs integration lookup
+        // Integration Step: Fetch current price from Inventory (Sales Catalog)
+        // This ensures the price is frozen at the moment of the transaction
+        var sellableProducts = await _catalogService.GetProductsAsync(companyCen, new SellableProductQueryFilters { Search = request.ProductCen });
+        var product = sellableProducts.FirstOrDefault(p => p.ProductCen == request.ProductCen);
+        
+        decimal unitPrice = product?.SalePrice ?? 0;
+        if (unitPrice == 0) throw new InvalidOperationException("Product price not found or is zero. Transaction cannot proceed.");
+
+        var item = new TicketItem(request.ProductCen, request.Quantity, unitPrice, request.Note);
 
         await _ticketRepo.AddItemAsync(ticketCen, item);
         await UpdateTotals(ticket, companyCen);

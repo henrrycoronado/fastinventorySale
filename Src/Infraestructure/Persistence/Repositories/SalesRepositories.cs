@@ -193,6 +193,11 @@ public class SaleRepository : ISaleRepository
         var models = await _dbContext.Sales.AsNoTracking().Where(s => s.CreatedAt.Date == date.Date).ToListAsync();
         return models.Select(m => MapToDomain(m));
     }
+    public async Task<IEnumerable<Sale>> GetByMonthlyRangeAsync(string companyCen, DateTimeOffset start, DateTimeOffset end)
+    {
+        var models = await _dbContext.Sales.AsNoTracking().Where(s => s.CreatedAt >= start && s.CreatedAt <= end).ToListAsync();
+        return models.Select(m => MapToDomain(m));
+    }
     public async Task AddAsync(Sale sale) => await _dbContext.Sales.AddAsync(new SaleModel { SaleCen = sale.SaleCen, TicketCen = sale.TicketCen, PaymentMethodCode = sale.PaymentMethodCode, InventoryDocumentCen = sale.InventoryDocumentCen, Total = sale.Total, CreatedAt = sale.CreatedAt });
     private static Sale MapToDomain(SaleModel m)
     {

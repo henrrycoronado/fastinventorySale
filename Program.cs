@@ -1,4 +1,6 @@
 using DotNetEnv;
+using Polly;
+using Polly.Extensions.Http;
 
 using fastinventorySale.Src.Application.Interfaces;
 using fastinventorySale.Src.Application.Services;
@@ -40,10 +42,20 @@ builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // External Clients
+var retryPolicy = HttpPolicyExtensions
+    .HandleTransientHttpError()
+    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+var circuitBreakerPolicy = HttpPolicyExtensions
+    .HandleTransientHttpError()
+    .CircuitBreakerAsync(5, TimeSpan.FromSeconds(30));
+
 builder.Services.AddHttpClient<IInventoryClient, InventoryClient>(client =>
 {
     client.BaseAddress = new Uri(inventoryApiUrl);
-});
+})
+.AddPolicyHandler(retryPolicy)
+.AddPolicyHandler(circuitBreakerPolicy);
 
 // Services
 builder.Services.AddScoped<ICatalogService, CatalogService>();

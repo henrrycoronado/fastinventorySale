@@ -11,6 +11,7 @@ public interface ICatalogService
 public interface IDashboardService
 {
     Task<DailySalesDashboardDto> GetDailySalesAsync(string companyCen);
+    Task<MonthlySalesDashboardDto> GetMonthlySalesAsync(string companyCen);
     Task<IEnumerable<TopProductDashboardContractResponse>> GetTopProductsAsync(string companyCen, int topN);
     Task<KdsStatusDashboardDto> GetKdsStatusAsync(string companyCen);
 }

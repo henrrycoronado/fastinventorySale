@@ -15,6 +15,9 @@ public class DashboardController : ControllerBase
     [HttpGet("daily-sales")]
     public async Task<ActionResult<DailySalesDashboardDto>> GetDailySales(string companyCen) => Ok(await _dashboardService.GetDailySalesAsync(companyCen));
 
+    [HttpGet("monthly")]
+    public async Task<ActionResult<MonthlySalesDashboardDto>> GetMonthlySales(string companyCen) => Ok(await _dashboardService.GetMonthlySalesAsync(companyCen));
+
     [HttpGet("top-products")]
     public async Task<ActionResult<IEnumerable<TopProductDashboardContractResponse>>> GetTopProducts(string companyCen, [FromQuery] int topN = 10) => Ok(await _dashboardService.GetTopProductsAsync(companyCen, topN));
 
