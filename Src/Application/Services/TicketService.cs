@@ -161,5 +161,15 @@ public class TicketService : ITicketService
     }
 
     private static TicketContractResponse MapToDto(Ticket t) => new() { TicketCen = t.TicketCen, DailyNumber = t.DailyNumber, Status = t.Status, WaiterCen = t.WaiterCen, CreatedAt = t.CreatedAt, ItemCount = t.Items.Count, Total = t.Total };
-    private static TicketItemContractResponse MapToItemDto(TicketItem i) => new() { TicketItemCen = i.TicketItemCen, ProductCen = i.ProductCen, Quantity = i.Quantity, UnitPrice = i.UnitPrice, Subtotal = i.Quantity * i.UnitPrice, Note = i.Note, KdsStatus = i.KdsStatus };
+    private static TicketItemContractResponse MapToItemDto(TicketItem i) => new() 
+    { 
+        TicketItemCen = i.TicketItemCen, 
+        ProductCen = i.ProductCen, 
+        Quantity = i.Quantity, 
+        UnitPrice = i.UnitPrice, 
+        Note = i.Note, 
+        Status = i.KdsStatus,
+        SentAt = i.SentAt?.ToString("O"),
+        ResendCount = i.ResendCount
+    };
 }

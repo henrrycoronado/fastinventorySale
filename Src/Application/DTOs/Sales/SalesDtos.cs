@@ -23,15 +23,17 @@ public class TopProductDashboardContractResponse
 {
     public string ProductCen { get; set; } = string.Empty;
     public string ProductName { get; set; } = string.Empty;
-    public int Quantity { get; set; }
-    public double TotalAmount { get; set; }
+    public int TotalQuantity { get; set; }
+    public string? CategoryCen { get; set; }
+    public string? CategoryName { get; set; }
+    public double SalePrice { get; set; }
 }
 
 public class KdsStatusDashboardDto
 {
-    public int PendingItems { get; set; }
-    public int PreparingItems { get; set; }
-    public double AverageWaitTimeMinutes { get; set; }
+    public int PendingCount { get; set; }
+    public int PreparingCount { get; set; }
+    public int ReadyCount { get; set; }
 }
 
 public class KdsTeamContractResponse
@@ -45,11 +47,13 @@ public class KdsItemContractResponse
 {
     public string TicketItemCen { get; set; } = string.Empty;
     public string TicketCen { get; set; } = string.Empty;
+    public string ProductCen { get; set; } = string.Empty;
     public string ProductName { get; set; } = string.Empty;
     public int Quantity { get; set; }
     public string Status { get; set; } = string.Empty;
-    public DateTimeOffset OrderedAt { get; set; }
     public string? Note { get; set; }
+    public int ResendCount { get; set; }
+    public string CreatedAt { get; set; } = string.Empty;
 }
 
 public class UpdateKdsItemStatusContractRequest
@@ -97,9 +101,10 @@ public class TicketItemContractResponse
     public string ProductName { get; set; } = string.Empty;
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
-    public decimal Subtotal { get; set; }
     public string? Note { get; set; }
-    public string KdsStatus { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public string? SentAt { get; set; }
+    public int ResendCount { get; set; }
 }
 
 public class CreateTicketItemContractRequest

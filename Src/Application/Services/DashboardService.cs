@@ -60,9 +60,9 @@ public class DashboardService : IDashboardService
         var items = tickets.SelectMany(t => t.Items).ToList();
         return new KdsStatusDashboardDto
         {
-            PendingItems = items.Count(i => i.KdsStatus == "CREATED"),
-            PreparingItems = items.Count(i => i.KdsStatus == "PREPARING"),
-            AverageWaitTimeMinutes = 0
+            PendingCount = items.Count(i => i.KdsStatus == "CREATED"),
+            PreparingCount = items.Count(i => i.KdsStatus == "PREPARING"),
+            ReadyCount = items.Count(i => i.KdsStatus == "READY")
         };
     }
 }

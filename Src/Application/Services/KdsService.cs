@@ -45,11 +45,13 @@ public class KdsService : IKdsService
             {
                 TicketItemCen = x.Item.TicketItemCen,
                 TicketCen = x.Ticket.TicketCen,
+                ProductCen = x.Item.ProductCen,
                 ProductName = "Unknown",
                 Quantity = x.Item.Quantity,
                 Status = x.Item.KdsStatus,
-                OrderedAt = x.Ticket.CreatedAt,
-                Note = x.Item.Note
+                CreatedAt = x.Ticket.CreatedAt.ToString("O"),
+                Note = x.Item.Note,
+                ResendCount = x.Item.ResendCount
             });
 
         return items;

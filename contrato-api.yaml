@@ -566,6 +566,66 @@ paths:
               schema: {}
             text/json:
               schema: {}
+    post:
+      tags:
+      - InventoryCatalogContract
+      summary: Crea una bodega
+      description: |-
+        Registra una nueva bodega para la empresa.
+        Forma parte del contrato de integracion entre servicios.
+      parameters:
+      - name: companyCen
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWarehouseContractRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WarehouseContractDto'
+
+  /api/inventory/companies/{companyCen}/warehouses/{warehouseCen}:
+    put:
+      tags:
+      - InventoryCatalogContract
+      summary: Actualiza una bodega
+      description: |-
+        Modifica los datos de una bodega existente.
+        Forma parte del contrato de integracion entre servicios.
+      parameters:
+      - name: companyCen
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: warehouseCen
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWarehouseContractRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WarehouseContractDto'
+
   /api/inventory/companies:
     get:
       tags:
@@ -594,6 +654,27 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CompanyContractDto'
+    post:
+      tags:
+      - InventoryCompaniesContract
+      summary: Crea una empresa
+      description: |-
+        Registra una nueva empresa en el sistema de inventario.
+        Forma parte del contrato de integracion entre servicios.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCompanyContractRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyContractDto'
+
   /api/inventory/companies/{companyCen}:
     get:
       tags:
@@ -649,6 +730,33 @@ paths:
               schema: {}
             text/json:
               schema: {}
+    put:
+      tags:
+      - InventoryCompaniesContract
+      summary: Actualiza una empresa
+      description: |-
+        Modifica los datos de una empresa existente.
+        Forma parte del contrato de integracion entre servicios.
+      parameters:
+      - name: companyCen
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCompanyContractRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyContractDto'
+
   /api/inventory/companies/{companyCen}/documents:
     post:
       tags:
@@ -790,6 +898,39 @@ paths:
               schema: {}
             text/json:
               schema: {}
+
+  /api/inventory/companies/{companyCen}/documents/{documentCen}:
+    get:
+      tags:
+      - InventoryDocumentsContract
+      summary: Obtiene detalle de un documento
+      description: |-
+        Devuelve la información detallada de un documento de inventario específico.
+        Forma parte del contrato de integracion entre servicios.
+      parameters:
+      - name: companyCen
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: documentCen
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryDocumentContractDto'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema: {}
+
   /api/inventory/companies/{companyCen}/products/{productCen}/kardex:
     get:
       tags:
@@ -1936,6 +2077,31 @@ paths:
               schema: {}
             text/json:
               schema: {}
+    post:
+      tags:
+      - KdsContract
+      summary: Crea un equipo KDS
+      description: |-
+        Registra un nuevo equipo de cocina (KDS).
+      parameters:
+      - name: companyCen
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateKdsTeamContractRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KdsTeamContractResponse'
   /api/sales/companies/{companyCen}/kds/teams/{teamCen}/items:
     get:
       tags:
@@ -2860,6 +3026,45 @@ paths:
               schema: {}
             text/json:
               schema: {}
+    post:
+      tags:
+      - WaitersContract
+      summary: Crea un mesero
+      description: |-
+        Registra un nuevo mesero para la empresa.
+      parameters:
+      - name: companyCen
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWaiterContractRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WaiterContractResponse'
+
+  /api/Health:
+    get:
+      summary: Consulta estado del servicio
+      description: |-
+        Endpoint de monitoreo para verificar que el servicio de ventas está operativo.
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Healthy
 
   # --- NUEVAS RUTAS: MÓDULO DE COMPRAS ---
   /api/purchases/companies/{companyCen}/suppliers:
@@ -2896,6 +3101,30 @@ paths:
             application/json:
               schema: {$ref: '#/components/schemas/SupplierContractDto'}
 
+  /api/purchases/companies/{companyCen}/suppliers/{supplierCen}:
+    put:
+      tags: [PurchasesContract]
+      summary: Actualiza un proveedor
+      parameters:
+      - name: companyCen
+        in: path
+        required: true
+        schema: {type: string}
+      - name: supplierCen
+        in: path
+        required: true
+        schema: {type: string}
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/UpdateSupplierContractRequest'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SupplierContractDto'}
+
   /api/purchases/companies/{companyCen}/orders:
     get:
       tags: [PurchasesContract]
@@ -2926,6 +3155,48 @@ paths:
       responses:
         '201':
           description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PurchaseOrderContractDto'}
+
+  /api/purchases/companies/{companyCen}/orders/{orderCen}:
+    get:
+      tags: [PurchasesContract]
+      summary: Obtiene detalle de una orden de compra
+      parameters:
+      - name: companyCen
+        in: path
+        required: true
+        schema: {type: string}
+      - name: orderCen
+        in: path
+        required: true
+        schema: {type: string}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PurchaseOrderDetailContractDto'}
+    put:
+      tags: [PurchasesContract]
+      summary: Actualiza una orden de compra
+      parameters:
+      - name: companyCen
+        in: path
+        required: true
+        schema: {type: string}
+      - name: orderCen
+        in: path
+        required: true
+        schema: {type: string}
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CreatePurchaseOrderContractRequest'}
+      responses:
+        '200':
+          description: OK
           content:
             application/json:
               schema: {$ref: '#/components/schemas/PurchaseOrderContractDto'}
@@ -3922,6 +4193,76 @@ components:
     CreatePurchaseOrderContractRequest:
       type: object
       properties:
+        supplierCen:
+          type: string
+        warehouseCen:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseOrderLineContractDto'
+    CreateWarehouseContractRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        isActive:
+          type: boolean
+    UpdateWarehouseContractRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        isActive:
+          type: boolean
+    CreateCompanyContractRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        isActive:
+          type: boolean
+    UpdateCompanyContractRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        isActive:
+          type: boolean
+    CreateWaiterContractRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    CreateKdsTeamContractRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        categoryCens:
+          type: array
+          items:
+            type: string
+    UpdateSupplierContractRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    PurchaseOrderDetailContractDto:
+      type: object
+      properties:
+        orderCen:
+          type: string
+        status:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        confirmedAt:
+          type: string
+          format: date-time
+          nullable: true
         supplierCen:
           type: string
         warehouseCen:
