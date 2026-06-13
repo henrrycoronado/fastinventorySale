@@ -66,12 +66,26 @@ builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<IConfigService, ConfigService>();
 
 builder.Services.AddControllers();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("*")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseCors("AllowFrontend");
 
 if (app.Environment.IsDevelopment())
 {
